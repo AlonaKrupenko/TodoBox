@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import _ from "lodash";
-import Item from "./Item";
+import Item from "../Item/Item";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./style.css";
 
 function TodoBox() {
   const [value, setValue] = useState("");
@@ -10,12 +12,18 @@ function TodoBox() {
   );
   const [titleValue, setTitleValue] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     localStorage.setItem("todoListData", JSON.stringify(todoList));
   }, [todoList]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
+  };
+
+  const selectItem = (id) => {
+    navigate("/todo-items/" + id);
   };
 
   const handleTitleChange = (e) => {
@@ -93,21 +101,23 @@ function TodoBox() {
                   className="form-control"
                   placeholder="I am going..."
                   value={value}
+                  style={{
+                    height: "200px",
+                  }}
                 />
               </div>
 
               <div className="d-flex justify-content-between">
-                {/* разобраться с кнопками при экране меньше 1200 */}
                 <div className="">
                   <button type="submit" className="btn btn-primary m-1">
-                    Create Task!
+                    Create task
                   </button>
                   <button
                     type="reset"
                     className="btn btn-warning"
                     onClick={handleClearAll}
                   >
-                    Очистить
+                    Clear
                   </button>
                 </div>
                 <button
@@ -115,7 +125,7 @@ function TodoBox() {
                   className="btn btn-danger"
                   onClick={handleRemoveAll}
                 >
-                  Удалить все
+                  Remove all tasks
                 </button>
               </div>
             </form>
@@ -126,10 +136,11 @@ function TodoBox() {
               {todoList.map((el) => {
                 return (
                   <Item
+                    key={_.uniqueId()}
                     task={el}
                     onRemove={handleRemove}
                     onChangeCheckbox={handleCheckboxChange}
-                    key={_.uniqueId()}
+                    onSelect={selectItem}
                   />
                 );
               })}
