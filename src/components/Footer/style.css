@@ -1,0 +1,8 @@
+.footer-block {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(227, 242, 253);
+  padding: 10px 0;
+  text-align: start;
+}
